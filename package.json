@@ -1,0 +1,30 @@
+{
+  "name": "fb-server",
+  "version": "1.0.0",
+  "description": "db server for fb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pojok-webdev/fb-server.git"
+  },
+  "keywords": [
+    "fb",
+    "server"
+  ],
+  "author": "puji w prayitno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pojok-webdev/fb-server/issues"
+  },
+  "homepage": "https://github.com/pojok-webdev/fb-server#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "express": "^4.16.3",
+    "path": "^0.12.7",
+    "promise-mysql": "^3.3.1"
+  }
+}
