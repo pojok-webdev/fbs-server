@@ -4,7 +4,7 @@ getFbs = () => {
 }
 getFb = obj => {
     sql = 'select * from fbs '
-    sql+= 'where id = ' + obj.id + ' '
+    sql+= 'where nofb = ' + obj.nofb + ' '
     return sql
 }
 saveFb = obj => {
