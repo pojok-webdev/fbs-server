@@ -29,7 +29,8 @@ getPics = (obj) => {
 }
 getPic = obj => {
     sql = 'select * from fbpics '
-    sql+= 'where nofb = "' + obj.id + '" '
+    sql+= 'where nofb = "' + obj.nofb + '" '
+    sql+= 'and role = "' + obj.role + '" '
     return sql
 }
 savePic = obj => {
@@ -42,8 +43,33 @@ savePic = obj => {
 updatePic = obj => {
     sql = 'update fbpics '
     sql+= 'set '
-    sql+= 'nofb="'+obj.nofb+'",name="'+obj.name+'",role="'+obj.role+'",position="'+obj.position+'",idnum="'+obj.idnum+'",phone="'+obj.phone+'",hp="'+obj.hp+'",email="'+obj.email+'"'
-    sql+= 'where nofb="'+obj.nofb+'"'
+    sql+= 'nofb="'+obj.nofb+'",name="'+obj.name+'",role="'+obj.role+'",position="'+obj.position+'",idnum="'+obj.idnum+'",phone="'+obj.phone+'",hp="'+obj.hp+'",email="'+obj.email+'" '
+    sql+= 'where nofb="'+obj.nofb+'" and role="'+obj.role+'" '
+    return sql
+}
+
+
+getServices = obj => {
+    sql = 'select * from fbservices '
+    sql+= 'where fb_id="' + obj.nofb + '" '
+    return sql
+}
+getService = obj => {
+    sql = 'select * from fbservices '
+    sql+= 'where id = "' + obj.id + '" '
+    return sql
+}
+saveService = obj => {
+    sql = 'insert into fbservices '
+    sql+= '(fb_id,category,name,bwtype,upm,upk,upstr,dnm,dnk,dnstr,space,bandwidth)'
+    sql+= 'values '
+    sql+= '("'+obj.fb_id+'","'+obj.category+'","'+obj.name+'","'+obj.bwtype+'","'+obj.upm+'","'+obj.upk+'","'+obj.upstr+'","'+obj.dnm+'","'+obj.dnk+'","'+obj.dnstr+'","'+obj.space+'","'+obj.bandwidth+'")'
+    return sql
+}
+updateService = obj => {
+    sql = 'update fbservices '
+    sql+= 'set '
+    sql+= 'fb_id="'+obj.fb_id+'",category="'+obj.category+'",name="'+obj.name+'",bwtype="'+obj.bwtype+'",upm="'+obj.upm+'",upk="'+obj.upk+'",upstr="'+obj.upstr+'",dnm="'+obj.dnm+'",dnk="'+obj.dnk+'",dnstr="'+obj.dnstr+'",space="'+obj.space+'",bandwidth="'+obj.bandwidth+'"'
     return sql
 }
 
@@ -55,5 +81,9 @@ module.exports = {
     getPics : getPics,
     getPic : getPic,
     savePic : savePic,
-    updatePic : updatePic
+    updatePic : updatePic,
+    getServices : getServices,
+    getService : getService,
+    saveService : saveService,
+    updateService : updateService
 }

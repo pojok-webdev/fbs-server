@@ -48,8 +48,8 @@ app.get('/getpics/:nofb',(req,res)=>{
         res.send(result)
     })
 })
-app.get('/getpic/:id',(req,res)=>{
-    db.executeQuery(query.getFb({id:req.params.id}),result=>{
+app.post('/getpic',(req,res)=>{
+    db.executeQuery(query.getPic(req.body),result=>{
         console.log("getpic",result)
         res.send(result)
     })
@@ -65,6 +65,35 @@ app.post('/updatepic',(req,res) => {
     console.log("Query",query.updatePic(req.body))
     db.executeQuery(query.updatePic(req.body),result=>{
         console.log("updatepic",result)
+        res.send(result)
+    })
+})
+
+
+app.get('/getservices/:nofb',(req,res)=>{
+    console.log("NOFB",req.params.nofb)
+    db.executeQuery(query.getServices({nofb:req.params.nofb}),result=>{
+        console.log("getservice",result)
+        res.send(result)
+    })
+})
+app.post('/getservice',(req,res)=>{
+    db.executeQuery(query.getService(req.body),result=>{
+        console.log("getservice",result)
+        res.send(result)
+    })
+})
+app.post('/saveservice',(req,res) => {
+    db.executeQuery(query.saveService(req.body),result=>{
+        console.log("saveservice",result)
+        res.send(result)
+    })
+})
+app.post('/updateservice',(req,res) => {
+    console.log("Body Parser",req.body)
+    console.log("Query",query.updateService(req.body))
+    db.executeQuery(query.updatePic(req.body),result=>{
+        console.log("updateservice",result)
         res.send(result)
     })
 })
