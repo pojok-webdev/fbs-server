@@ -123,4 +123,10 @@ app.post('/updatefee', (req,res) => {
         res.send(result)
     })
 })
+app.post('/removefee', (req,res) => {
+    db.executeQuery(query.removeFee(req.body), result => {
+        console.log("Remove Fee result",result)
+        res.send(result)
+    })
+})
 app.listen(process.env.PORT || 2000)

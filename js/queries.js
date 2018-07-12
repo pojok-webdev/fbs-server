@@ -97,6 +97,12 @@ updateFee = obj => {
     and+= 'and nofb="'+ob.nofb+'"'
     return sql
 }
+removeFee = obj => {
+    sql = 'delete from fbfees '
+    sql+= 'where nofb = "' + obj.nofb + '" '
+    sql+= 'and name = "' + obj.name + '" '
+    return sql
+}
 module.exports = {
     getFbs : getFbs,
     getFb : getFb,
@@ -113,5 +119,6 @@ module.exports = {
     getFees : getFees,
     getFee : getFee,
     saveFee : saveFee,
-    updateFee : updateFee
+    updateFee : updateFee,
+    removeFee : removeFee
 }
