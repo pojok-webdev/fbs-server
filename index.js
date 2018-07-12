@@ -97,5 +97,30 @@ app.post('/updateservice',(req,res) => {
         res.send(result)
     })
 })
-
+app.post('/getfees', (req,res) => {
+    console.log("params",req.body)
+    console.log("Query",query.getFees(req.body))
+    db.executeQuery(query.getFees(req.body),result => {
+        console.log("Get Fees Result", result)
+        res.send(result)
+    })
+})
+app.post('/getfee', (req,res) => {
+    db.executeQuery(query.getFee(req.body),result => {
+        console.log("Get Fee Result", result)
+        res.send(result)
+    })
+})
+app.post('/savefee', (req,res) => {
+    db.executeQuery(query.saveFee(req.body), result => {
+        console.log("Save Fee Result", result)
+        res.send(result)
+    })
+})
+app.post('/updatefee', (req,res) => {
+    db.executeQuery(query.updateFee(req.body), result => {
+        console.log("Update Fee Result", result)
+        res.send(result)
+    })
+})
 app.listen(process.env.PORT || 2000)
