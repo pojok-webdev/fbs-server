@@ -3,7 +3,40 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     path = require('path'),
     db = require('./js/db.js'),
-    query = require('./js/queries')
+    lodash = require('lodash'),
+    jwt = require('jsonwebtoken'),
+    passport = require('passport'),
+    passportJWT = require('passport-jwt'),
+    extractJWT = passportJWT.ExtractJwt,
+    jwtStrategy = passportJWT.Strategy,
+    users = [
+        {
+            id:1,
+            name:'puji',
+            password:'najma'
+        },
+        {
+            id:2,
+            name:'nuria',
+            password:'puji'
+        }
+    ],
+    jwtOptions = {
+        jwtFromRequest : extractJWT.fromAuthHeaderWithScheme('jwt'),
+        secretOrKey:'abc'    
+    },
+    query = require('./js/queries'),
+    strategy = new jwtStrategy(jwtOptions,(jwtPayload,next) => {
+        console.log("payload received",jwtPayload)
+        var user = users[lodash.findIndex(users,{id:jwtPayload.id})]
+        if(user){
+            next(null,user)
+        }else{
+            next(null,false)
+        }
+    });
+    passport.use(strategy)
+
 app.engine('html',require('ejs').renderFile)
 app.set('views',path.join(__dirname,'views'))
 
@@ -15,6 +48,26 @@ app.use((req,res,next)=>{
 app.use(express.static(__dirname+'views'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.use(passport.initialize())
+app.post('/login',(req,res) => {
+    if(req.body.name && req.body.password){
+        var name = req.body.name,
+            password = req.body.password
+        console.log("Data Received",name,password)
+    }
+    var user = users[lodash.findIndex(users,{name:name})]
+    if(!user){
+        res.status(401).json({message:'User not found'})
+    }else{
+    if(user.password === password){
+        var payload = {id:user.id} 
+        var token = jwt.sign(payload, jwtOptions.secretOrKey)
+        res.json({message:'ok',token:token})
+    }else{
+        res.status('401').json({message:'Password did not match'})
+    }}
+})
+
 app.get('/getfbs',(req,res)=>{
     db.executeQuery(query.getFbs(),result=>{
         console.log("getFb",result)
