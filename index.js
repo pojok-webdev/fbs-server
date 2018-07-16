@@ -6,6 +6,7 @@ var express = require('express'),
     lodash = require('lodash'),
     jwt = require('jsonwebtoken'),
     secretOrKey = 'padinet',
+    sha1 = require('sha1'),
     users = [
         {
             id: 1,
@@ -46,6 +47,20 @@ app.use((req,res,next)=>{
 app.use(express.static(__dirname+'views'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
+app.post('/testlogin',(req,res) => {
+    email = req.body.email
+    password = req.body.password
+    db.executeQuery(query.login({email:req.body.email}),result=>{
+        console.log("login",result)
+        console.log("SHA1 Result",sha1(password+result.salt))
+        if(sha1(password+result.salt)===result.password){
+            console.log("Login benar")
+        }else{
+            console.log("Login salah")
+        }
+        res.send(result)
+    })
+})
 app.post('/login',(req,res) => {
     if(req.body.name && req.body.password){
         var name = req.body.name,

@@ -103,6 +103,12 @@ removeFee = obj => {
     sql+= 'and name = "' + obj.name + '" '
     return sql
 }
+login = obj => {
+    //scenario:if (sha1($password.$qry->row('salt')) == $qry->row('password'))
+    sql = 'select id,salt,password from users '
+    sql+= 'where email='+obj.email+' '
+    return sql
+}
 module.exports = {
     getFbs : getFbs,
     getFb : getFb,
@@ -120,5 +126,6 @@ module.exports = {
     getFee : getFee,
     saveFee : saveFee,
     updateFee : updateFee,
-    removeFee : removeFee
+    removeFee : removeFee,
+    login : login
 }
