@@ -5,37 +5,31 @@ var express = require('express'),
     db = require('./js/db.js'),
     lodash = require('lodash'),
     jwt = require('jsonwebtoken'),
-    passport = require('passport'),
-    passportJWT = require('passport-jwt'),
-    extractJWT = passportJWT.ExtractJwt,
-    jwtStrategy = passportJWT.Strategy,
+    secretOrKey = 'padinet',
     users = [
         {
-            id:1,
+            id: 1,
+            name: 'jonathanmh',
+            password: '%2yx4'
+          },
+          {
+            id: 2,
+            name: 'test',
+            password: 'test'
+          },
+        
+        {
+            id:3,
             name:'puji',
             password:'najma'
         },
         {
-            id:2,
+            id:4,
             name:'nuria',
             password:'puji'
         }
     ],
-    jwtOptions = {
-        jwtFromRequest : extractJWT.fromAuthHeaderWithScheme('jwt'),
-        secretOrKey:'abc'    
-    },
-    query = require('./js/queries'),
-    strategy = new jwtStrategy(jwtOptions,(jwtPayload,next) => {
-        console.log("payload received",jwtPayload)
-        var user = users[lodash.findIndex(users,{id:jwtPayload.id})]
-        if(user){
-            next(null,user)
-        }else{
-            next(null,false)
-        }
-    });
-    passport.use(strategy)
+    query = require('./js/queries');
 
 app.engine('html',require('ejs').renderFile)
 app.set('views',path.join(__dirname,'views'))
@@ -48,7 +42,6 @@ app.use((req,res,next)=>{
 app.use(express.static(__dirname+'views'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-app.use(passport.initialize())
 app.post('/login',(req,res) => {
     if(req.body.name && req.body.password){
         var name = req.body.name,
@@ -60,14 +53,30 @@ app.post('/login',(req,res) => {
         res.status(401).json({message:'User not found'})
     }else{
     if(user.password === password){
-        var payload = {id:user.id} 
-        var token = jwt.sign(payload, jwtOptions.secretOrKey)
+        var payload = {id:user.id,name:user.name} 
+        var token = jwt.sign(payload, secretOrKey)
+        console.log("Token",token)
         res.json({message:'ok',token:token})
     }else{
         res.status('401').json({message:'Password did not match'})
     }}
 })
-
+app.get('/islogin/:token', (req,res) => {
+    verify = jwt.verify(req.params.token,secretOrKey,(err,data) => {
+        if(!err){
+            console.log("Verified",data)
+            res.send(data)
+        }else{
+            console.log("Err",err)
+            res.send(err)
+        }
+    })
+})
+app.get('/getlogin/:token',(req,res) => {
+    decoded = jwt.decode(req.params.token,{complete:true})
+    console.log("decoded",decoded)
+    res.send(decoded)
+})
 app.get('/getfbs',(req,res)=>{
     db.executeQuery(query.getFbs(),result=>{
         console.log("getFb",result)
