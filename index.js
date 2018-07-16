@@ -10,23 +10,27 @@ var express = require('express'),
         {
             id: 1,
             name: 'jonathanmh',
-            password: '%2yx4'
+            password: '%2yx4',
+            defaultRoute:'/fbs'
           },
           {
             id: 2,
             name: 'test',
-            password: 'test'
+            password: 'test',
+            defaultRoute:'/fbs'
           },
         
         {
             id:3,
             name:'puji',
-            password:'najma'
+            password:'najma',
+            defaultRoute:'/fbs'
         },
         {
             id:4,
             name:'nuria',
-            password:'puji'
+            password:'puji',
+            defaultRoute:'/fbs'
         }
     ],
     query = require('./js/queries');
@@ -53,10 +57,10 @@ app.post('/login',(req,res) => {
         res.status(401).json({message:'User not found'})
     }else{
     if(user.password === password){
-        var payload = {id:user.id,name:user.name} 
+        var payload = {id:user.id,name:user.name,defaultRoute:user.defaultRoute} 
         var token = jwt.sign(payload, secretOrKey)
         console.log("Token",token)
-        res.json({message:'ok',token:token})
+        res.json({message:'ok',token:token,defaultRoute:user.defaultRoute})
     }else{
         res.status('401').json({message:'Password did not match'})
     }}
