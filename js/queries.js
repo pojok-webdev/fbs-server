@@ -21,7 +21,7 @@ updateFb = obj => {
     sql+= 'where nofb="'+obj.nofb+'"'
     return sql
 }
-getPics = (obj) => {
+getPics = obj => {
     sql = 'select * from fbpics '
     sql+= 'where nofb = "' + obj.nofb + '" '
     return sql
@@ -104,9 +104,8 @@ removeFee = obj => {
     return sql
 }
 login = obj => {
-    //scenario:if (sha1($password.$qry->row('salt')) == $qry->row('password'))
     sql = 'select id,salt,password from users '
-    sql+= 'where email='+obj.email+' '
+    sql+= 'where email="'+obj.email+'" '
     return sql
 }
 module.exports = {

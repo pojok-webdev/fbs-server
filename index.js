@@ -4,9 +4,9 @@ var express = require('express'),
     path = require('path'),
     db = require('./js/db.js'),
     lodash = require('lodash'),
+    auth = require('./js/auth.js'),
     jwt = require('jsonwebtoken'),
     secretOrKey = 'padinet',
-    sha1 = require('sha1'),
     users = [
         {
             id: 1,
@@ -50,15 +50,18 @@ app.use(bodyParser.urlencoded({extended:true}))
 app.post('/testlogin',(req,res) => {
     email = req.body.email
     password = req.body.password
+    console.log("QUERY",query.login({email:req.body.email}))
     db.executeQuery(query.login({email:req.body.email}),result=>{
-        console.log("login",result)
-        console.log("SHA1 Result",sha1(password+result.salt))
-        if(sha1(password+result.salt)===result.password){
-            console.log("Login benar")
+        _result = result[0]
+        lg = auth.login(_result,password)
+        if(lg){
+            var payload = {id:_result.id,name:_result.username,email:_result.email,defaultRoute:'/fbs'}
+            var token = jwt.sign(payload,secretOrKey)
+            console.log('token',token)
+            res.send({message:'ok',token:token,defaultRoute:'/fbs'})
         }else{
-            console.log("Login salah")
+            res.send({message:'auth error'})
         }
-        res.send(result)
     })
 })
 app.post('/login',(req,res) => {
@@ -149,8 +152,6 @@ app.post('/updatepic',(req,res) => {
         res.send(result)
     })
 })
-
-
 app.get('/getservices/:nofb',(req,res)=>{
     console.log("NOFB",req.params.nofb)
     db.executeQuery(query.getServices({nofb:req.params.nofb}),result=>{
