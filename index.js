@@ -7,6 +7,7 @@ var express = require('express'),
     auth = require('./js/auth.js'),
     jwt = require('jsonwebtoken'),
     secretOrKey = 'padinet',
+    config = require('./js/configs.js'),
     users = [
         {
             id: 1,
@@ -56,7 +57,7 @@ app.post('/testlogin',(req,res) => {
         lg = auth.login(_result,password)
         if(lg){
             var payload = {id:_result.id,name:_result.username,email:_result.email,defaultRoute:'/fbs'}
-            var token = jwt.sign(payload,secretOrKey,{expiresIn:60})
+            var token = jwt.sign(payload,secretOrKey,{expiresIn:config.jwt.expiresIn})
             console.log('token',token)
             res.send({message:'ok',token:token,defaultRoute:'/fbs'})
         }else{
