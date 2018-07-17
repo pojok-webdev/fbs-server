@@ -56,7 +56,7 @@ app.post('/testlogin',(req,res) => {
         lg = auth.login(_result,password)
         if(lg){
             var payload = {id:_result.id,name:_result.username,email:_result.email,defaultRoute:'/fbs'}
-            var token = jwt.sign(payload,secretOrKey)
+            var token = jwt.sign(payload,secretOrKey,{expiresIn:60})
             console.log('token',token)
             res.send({message:'ok',token:token,defaultRoute:'/fbs'})
         }else{
