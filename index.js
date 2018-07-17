@@ -83,6 +83,31 @@ app.post('/login',(req,res) => {
         res.status('401').json({message:'Password did not match'})
     }}
 })
+app.post('/updatepassword',(req,res) => {
+    db.executeQuery(query.login({email:req.body.email,password:req.body.password}),result => {
+        user = result[0]
+        console.log("USER",result)
+        newpassword = auth.changePassword(user,req.body.newpassword)
+        console.log("QUERY",query.updatePassword({email:req.body.email},newpassword))
+        db.executeQuery(query.updatePassword({email:req.body.email},newpassword),result => {
+            res.send(result)
+        })
+    })
+})
+app.post('/createuser',(req,res) => {
+    newpassword = auth.changePassword({password:req.body.password},req.body.password)
+    console.log("New Password",newpassword)
+    req.body.password = newpassword
+    console.log("Query",query.createUser(req.body))
+    db.executeQuery(query.createUser(req.body),result => {
+        res.send(result)
+    })
+})
+app.post('/activateuser',(req,res) => {
+    db.executeQuery(query.activateUser(req.body,req.body.active), result => {
+        res.send(result)
+    })
+})
 app.get('/islogin/:token', (req,res) => {
     verify = jwt.verify(req.params.token,secretOrKey,(err,data) => {
         if(!err){

@@ -13,6 +13,14 @@ login = (obj,password) => {
         return false
     }
 }
+changePassword = (obj,password) => {
+    mypassword = obj.password
+    salt = mypassword.substring(0,10)
+    saltedpassword = sha1(salt+password)
+    __temp = saltedpassword.substring(0,30)
+    return salt+__temp
+}
 module.exports = {
-    login : login
+    login : login,
+    changePassword : changePassword
 }
