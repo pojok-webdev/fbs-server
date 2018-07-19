@@ -108,8 +108,9 @@ login = obj => {
     sql+= 'where email="'+obj.email+'" '
     return sql
 }
-updatePassword = (obj,password) => {
-    sql = 'update users set password="'+password+'" '
+updatePassword = (obj) => {
+    sql = 'update users set password="'+obj.password+'", '
+    sql+= 'salt="'+obj.salt+'" '
     sql+= 'where email = "' + obj.email + '" '
     return sql
 }
@@ -120,9 +121,9 @@ activateUser = (obj,active) => {
 }
 createUser = obj => {
     sql = 'insert into users '
-    sql+= '(username,email,password,ip_address,created_on) '
+    sql+= '(username,email,password,salt,ip_address,created_on) '
     sql+= 'values '
-    sql+= '("'+obj.username+'","'+obj.email+'","'+obj.password+'","127.0.0.1",0)'
+    sql+= '("'+obj.username+'","'+obj.email+'","'+obj.password+'","'+obj.salt+'","127.0.0.1",0)'
     return sql
 }
 module.exports = {

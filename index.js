@@ -4,7 +4,7 @@ var express = require('express'),
     path = require('path'),
     db = require('./js/db.js'),
     lodash = require('lodash'),
-    auth = require('./js/auth.js'),
+    auth = require('./js/auth.1.js'),
     jwt = require('jsonwebtoken'),
     secretOrKey = 'padinet',
     config = require('./js/configs.js'),
@@ -48,7 +48,7 @@ app.use((req,res,next)=>{
 app.use(express.static(__dirname+'views'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
-app.post('/testlogin',(req,res) => {
+app.post('/login',(req,res) => {
     email = req.body.email
     password = req.body.password
     console.log("QUERY",query.login({email:req.body.email}))
@@ -65,7 +65,7 @@ app.post('/testlogin',(req,res) => {
         }
     })
 })
-app.post('/login',(req,res) => {
+app.post('/testlogin',(req,res) => {
     if(req.body.name && req.body.password){
         var name = req.body.name,
             password = req.body.password
@@ -84,25 +84,28 @@ app.post('/login',(req,res) => {
         res.status('401').json({message:'Password did not match'})
     }}
 })
-app.post('/updatepassword',(req,res) => {
+app.post('/changepassword',(req,res) => {
+    console.log("Body",req.body)
     db.executeQuery(query.login({email:req.body.email,password:req.body.password}),result => {
         user = result[0]
         console.log("USER",result)
-        newpassword = auth.changePassword(user,req.body.newpassword)
-        console.log("QUERY",query.updatePassword({email:req.body.email},newpassword))
-        db.executeQuery(query.updatePassword({email:req.body.email},newpassword),result => {
+        console.log("req body password",req.body.newpassword)
+        user.password = req.body.newpassword
+        identity = auth.changePassword(user)
+        console.log("NEW PASSWORD",identity.password)
+        console.log("QUERY",query.updatePassword({email:req.body.email,password:identity.password,salt:identity.salt}))
+        db.executeQuery(query.updatePassword({email:req.body.email,password:identity.password,salt:identity.salt}),result => {
             res.send(result)
         })
     })
 })
 app.post('/createuser',(req,res) => {
-    newpassword = auth.changePassword({password:req.body.password},req.body.password)
-    console.log("New Password",newpassword)
-    req.body.password = newpassword
-    console.log("Query",query.createUser(req.body))
-    db.executeQuery(query.createUser(req.body),result => {
-        res.send(result)
-    })
+   user = auth.createUser(req.body)
+   console.log("BODY",req.body)
+   console.log("USER",user)
+   db.executeQuery(query.createUser(user),result => {
+       res.send(result)
+   })
 })
 app.post('/activateuser',(req,res) => {
     db.executeQuery(query.activateUser(req.body,req.body.active), result => {

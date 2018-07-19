@@ -20,6 +20,16 @@ changePassword = (obj,password) => {
     __temp = saltedpassword.substring(0,30)
     return salt+__temp
 }
+createSalt = (length,chars) => {
+    var result = '';
+    for (var i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+    return result;
+}
+
+createuser = (user) => {
+
+    return user
+}
 module.exports = {
     login : login,
     changePassword : changePassword
