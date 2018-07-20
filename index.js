@@ -128,6 +128,31 @@ app.get('/getlogin/:token',(req,res) => {
     console.log("decoded",decoded)
     res.send(decoded)
 })
+app.get('/getclients/:offset/:segment',(req,res) => {
+    db.executeQuery(query.getClients({offset:req.params.offset,segment:req.params.segment}), result => {
+        res.send(result)
+    })
+})
+app.get('/getclientslength', (req,res) => {
+    db.executeQuery(query.getClientsLength(), result => {
+        res.send(result)
+    })
+})
+app.get('/getclient',(req,res) => {
+    db.executeQuery(query.getClient({id:req.params.id}), result => {
+        res.send(result)
+    })
+})
+app.post('/saveclient',(req,res) => {
+    db.executeQuery(query.saveClient(req.body), result => {
+        res.send(result)
+    })
+})
+app.post('/updateclient',(req,res) => {
+    db.executeQuery(query.updateClient(req.body), result => {
+        res.send(result)
+    })
+})
 app.get('/getfbs',(req,res)=>{
     db.executeQuery(query.getFbs(),result=>{
         console.log("getFb",result)

@@ -1,3 +1,35 @@
+getClients = (obj) => {
+    sql = 'select a.id,a.name,count(b.nofb)fbcount from clients a '
+    sql+= 'left outer join fbs b on b.client_id=a.id '
+    sql+= 'where active="1" '
+    sql+= 'group by a.id,a.name '
+    sql+= 'order by a.name asc '
+    sql+= 'limit '+obj.segment+','+obj.offset+' '
+    return sql
+}
+getClientsLength = () => {
+    sql = 'select count(id) cnt from clients '
+    sql+= 'where active="1" '
+    return sql
+}
+getClient = obj => {
+    sql = 'select id,name from clients '
+    sql+= 'where id='+obj.id+' '
+    return sql
+}
+saveClient = obj => {
+    sql = 'insert into clients '
+    sql+= '() '
+    sql+= 'values '
+    sql+= '()'
+    return sql
+}
+updateClient = obj => {
+    sql = 'update clients '
+    sql+= 'set '
+    sql+= ''
+    sql+= 'where id='+obj.id+' '
+}
 getFbs = () => {
     sql = 'select * from fbs '
     return sql
@@ -147,5 +179,10 @@ module.exports = {
     login : login,
     updatePassword : updatePassword,
     createUser : createUser,
-    activateUser : activateUser
+    activateUser : activateUser,
+    getClients : getClients,
+    getClientsLength : getClientsLength,
+    getClient : getClient,
+    saveClient : saveClient,
+    updateClient : updateClient
 }
