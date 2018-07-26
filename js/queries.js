@@ -1,10 +1,11 @@
 getClients = (obj) => {
-    sql = 'select a.id,a.name,count(b.nofb)fbcount from clients a '
+    sql = 'select a.id,a.name,a.alias, a.address, count(b.nofb)fbcount from clients a '
     sql+= 'left outer join fbs b on b.client_id=a.id '
     sql+= 'where active="1" '
-    sql+= 'group by a.id,a.name '
+    sql+= 'group by a.id,a.name,a.alias,a.address '
     sql+= 'order by a.name asc '
     sql+= 'limit '+obj.segment+','+obj.offset+' '
+    console.log(sql)
     return sql
 }
 getClientsLength = () => {
@@ -13,8 +14,32 @@ getClientsLength = () => {
     return sql
 }
 getClient = obj => {
-    sql = 'select id,name from clients '
+    sql = 'select a.id,a.name,a.alias, a.address,count(b.nofb) fbcount  from clients a '
+    sql+= 'left outer join fbs b on b.client_id=a.id '
     sql+= 'where id='+obj.id+' '
+    sql+= 'group by a.id,a.name,a.alias,a.address '
+    console.log(sql)
+    return sql
+}
+searchClient = obj => {
+    sql = 'select a.id, a.name ,a.alias, a.address, count(b.nofb) fbcount from clients a '
+    sql+= 'left outer join fbs b on b.client_id=a.id '
+    sql+= 'where (a.name like "%'+obj.searchdata+'%" ' 
+    sql+= 'or a.alias like "%'+obj.searchdata+'%" '
+    sql+= 'or a.address like "%'+obj.searchdata+'%") '
+    sql+= 'and active="1" '
+    sql+= 'group by a.id,a.name,a.alias,a.address '
+    sql+= 'limit '+obj.segment+','+obj.offset+' '
+    console.log(sql)
+    return sql
+}
+searchClientLength = obj => {
+    sql = 'select count(id) cnt from clients '
+    sql+= 'where (name like "%'+obj.searchdata+'%" ' 
+    sql+= 'or alias like "%'+obj.searchdata+'%" '
+    sql+= 'or address like "%'+obj.searchdata+'%") '
+    sql+= 'and active="1" '
+    console.log(sql)
     return sql
 }
 saveClient = obj => {
@@ -30,14 +55,31 @@ updateClient = obj => {
     sql+= ''
     sql+= 'where id='+obj.id+' '
 }
-getFbs = () => {
+getFbs = obj => {
     sql = 'select * from fbs '
+    sql+= 'where client_id='+obj.client_id+' '
+    sql+= 'limit '+obj.pageIndex+', '+obj.pageSize+ ' '
+
     return sql
 }
 getFb = obj => {
     sql = 'select * from fbs '
     sql+= 'where nofb = "' + obj.nofb + '" '
     return sql
+}
+getFbCount = (obj) => {
+    sql = 'select count(client_id)fbCount from fbs where client_id='+obj.client_id;
+    return sql
+}
+generateFb = obj => {
+    sql = 'select case branch_id ';
+    sql+= ' when "1" then concat("SBY",date_format(now(),"%Y%m%d"),lpad(a.id,6,"0"),lpad('+obj.fbCount+',3,"0")) ';
+    sql+= ' when "2" then concat("JKT",date_format(now(),"%Y%m%d"),lpad(a.id,6,"0"),lpad('+obj.fbCount+',3,"0")) ';
+    sql+= ' when "3" then concat("MLG",date_format(now(),"%Y%m%d"),lpad(a.id,6,"0"),lpad('+obj.fbCount+',3,"0")) ';
+    sql+= ' when "4" then concat("BLI",date_format(now(),"%Y%m%d"),lpad(a.id,6,"0"),lpad('+obj.fbCount+',3,"0")) ';
+    sql+= 'end genfb ';
+    sql+= 'from clients a where id='+obj.client_id;
+    return sql    
 }
 saveFb = obj => {
     sql = 'insert into fbs '
@@ -163,6 +205,8 @@ module.exports = {
     getFb : getFb,
     saveFb : saveFb,
     updateFb : updateFb,
+    getFbCount : getFbCount,
+    generateFb : generateFb,
     getPics : getPics,
     getPic : getPic,
     savePic : savePic,
@@ -183,6 +227,8 @@ module.exports = {
     getClients : getClients,
     getClientsLength : getClientsLength,
     getClient : getClient,
+    searchClient : searchClient,
     saveClient : saveClient,
-    updateClient : updateClient
+    updateClient : updateClient,
+    searchClientLength : searchClientLength
 }

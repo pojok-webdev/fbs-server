@@ -138,8 +138,18 @@ app.get('/getclientslength', (req,res) => {
         res.send(result)
     })
 })
-app.get('/getclient',(req,res) => {
+app.get('/getclient/:id',(req,res) => {
     db.executeQuery(query.getClient({id:req.params.id}), result => {
+        res.send(result)
+    })
+})
+app.post('/searchclient',(req,res) => {
+    db.executeQuery(query.searchClient(req.body), result => {
+        res.send(result)
+    })
+})
+app.post('/searchclientlength',(req,res) => {
+    db.executeQuery(query.searchClientLength(req.body), result => {
         res.send(result)
     })
 })
@@ -153,8 +163,8 @@ app.post('/updateclient',(req,res) => {
         res.send(result)
     })
 })
-app.get('/getfbs',(req,res)=>{
-    db.executeQuery(query.getFbs(),result=>{
+app.get('/getfbs/:client_id/:pageIndex/:pageSize',(req,res)=>{
+    db.executeQuery(query.getFbs(req.params),result=>{
         console.log("getFb",result)
         res.send(result)
     })
@@ -165,7 +175,24 @@ app.get('/getfb/:nofb',(req,res)=>{
         res.send(result)
     })
 })
+app.get('/generatefb/:client_id', (req,res) => {
+    db.executeQuery(query.getFbCount({client_id:req.params.client_id}),countresult => {
+        console.log("CountResult",countresult)
+        db.executeQuery(query.generateFb({client_id:req.params.client_id,fbCount:countresult[0].fbCount}),result => {
+            console.log('FB Generated',result)
+            res.send(result)
+        })
+    })
+})
+cleanDate = dateString => {
+    splitedDate = dateString.split('T')
+    console.log("SPLITED DATE",splitedDate[0])
+    return splitedDate[0]
+}
 app.post('/savefb',(req,res) => {
+    req.body.activationdate = cleanDate(req.body.activationdate)
+    req.body.period1 = cleanDate(req.body.period1)
+    req.body.period2 = cleanDate(req.body.period2)
     db.executeQuery(query.saveFb(req.body),result=>{
         console.log("savefb",result)
         res.send(result)
