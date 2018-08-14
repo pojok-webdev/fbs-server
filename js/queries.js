@@ -83,15 +83,15 @@ generateFb = obj => {
 }
 saveFb = obj => {
     sql = 'insert into fbs '
-    sql+= '(nofb,client_id,name,businesstype,siup,npwp,address,city,telp,fax,activationdate,period1,period2,services)'
+    sql+= '(nofb,client_id,name,businesstype,siup,npwp,sppkp,address,city,telp,fax,activationdate,period1,period2,services)'
     sql+= 'values '
-    sql+= '("'+obj.nofb+'","'+obj.client_id+'","'+obj.name+'","'+obj.businesstype+'","'+obj.siup+'","'+obj.npwp+'","'+obj.address+'","'+obj.city+'","'+obj.telp+'","'+obj.fax+'","'+obj.activationdate+'","'+obj.period1+'","'+obj.period2+'","'+obj.services+'")'
+    sql+= '("'+obj.nofb+'","'+obj.client_id+'","'+obj.name+'","'+obj.businesstype+'","'+obj.siup+'","'+obj.npwp+'","'+obj.sppkp+'","'+obj.address+'","'+obj.city+'","'+obj.telp+'","'+obj.fax+'","'+obj.activationdate+'","'+obj.period1+'","'+obj.period2+'","'+obj.services+'")'
     return sql
 }
 updateFb = obj => {
     sql = 'update fbs '
     sql+= 'set '
-    sql+= 'nofb="'+obj.nofb+'",client_id="'+obj.client_id+'",name="'+obj.name+'",businesstype="'+obj.businesstype+'",siup="'+obj.siup+'",npwp="'+obj.npwp+'",address="'+obj.address+'",city="'+obj.city+'",telp="'+obj.telp+'",fax="'+obj.fax+'",activationdate="'+obj.activationdate+'",period1="'+obj.period1+'",period2="'+obj.period2+'",services="'+obj.services+'"'
+    sql+= 'nofb="'+obj.nofb+'",client_id="'+obj.client_id+'",name="'+obj.name+'",businesstype="'+obj.businesstype+'",siup="'+obj.siup+'",npwp="'+obj.npwp+'",sppkp="'+obj.sppkp+'",address="'+obj.address+'",city="'+obj.city+'",telp="'+obj.telp+'",fax="'+obj.fax+'",activationdate="'+obj.activationdate+'",period1="'+obj.period1+'",period2="'+obj.period2+'",services="'+obj.services+'"'
     sql+= 'where nofb="'+obj.nofb+'"'
     return sql
 }
@@ -110,7 +110,15 @@ savePic = obj => {
     sql = 'insert into fbpics '
     sql+= '(name,nofb,role,position,idnum,phone,hp,email)'
     sql+= 'values '
-    sql+= '("'+obj.name+'","'+obj.nofb+'","'+obj.role+'","'+obj.position+'","'+obj.idnum+'","'+obj.phone+'","'+obj.hp+'","'+obj.email+'")'
+    sql+= '("'+obj.name+'","'
+    sql+= obj.nofb+'","'
+    sql+= obj.role+'","'
+    sql+= obj.position+'","'
+    sql+= obj.idnum+'","'
+    sql+= obj.phone+'","'
+    sql+= obj.hp+'","'
+    sql+= obj.email+'")'
+    console.log('savepic',sql)
     return sql
 }
 updatePic = obj => {
@@ -132,15 +140,29 @@ getService = obj => {
 }
 saveService = obj => {
     sql = 'insert into fbservices '
-    sql+= '(fb_id,category,name,bwtype,upm,upk,upstr,dnm,dnk,dnstr,space,bandwidth)'
+    sql+= '(fb_id,category,name,bwtype,upm,upk,upstr,dnm,dnk,dnstr,space,bandwidth,customservice,createuser)'
     sql+= 'values '
-    sql+= '("'+obj.fb_id+'","'+obj.category+'","'+obj.name+'","'+obj.bwtype+'","'+obj.upm+'","'+obj.upk+'","'+obj.upstr+'","'+obj.dnm+'","'+obj.dnk+'","'+obj.dnstr+'","'+obj.space+'","'+obj.bandwidth+'")'
+    sql+= '("'+obj.fb_id+'","'+obj.category+'","'+obj.name+'","'+obj.bwtype+'","'+obj.upm+'","'+obj.upk+'","'+obj.upstr+'","'+obj.dnm+'","'+obj.dnk+'","'+obj.dnstr+'","'+obj.space+'","'+obj.bandwidth+'","'+obj.customservice+'","'+obj.createuser+'")'
+    console.log("Save service Query",sql)
     return sql
 }
 updateService = obj => {
     sql = 'update fbservices '
     sql+= 'set '
-    sql+= 'fb_id="'+obj.fb_id+'",category="'+obj.category+'",name="'+obj.name+'",bwtype="'+obj.bwtype+'",upm="'+obj.upm+'",upk="'+obj.upk+'",upstr="'+obj.upstr+'",dnm="'+obj.dnm+'",dnk="'+obj.dnk+'",dnstr="'+obj.dnstr+'",space="'+obj.space+'",bandwidth="'+obj.bandwidth+'"'
+    sql+= 'category="'+obj.category
+    sql+= '",name="'+obj.name
+    sql+= '",bwtype="'+obj.bwtype
+    sql+= '",upm="'+obj.upm
+    sql+= '",upk="'+obj.upk
+    sql+= '",upstr="'+obj.upstr
+    sql+= '",dnm="'+obj.dnm
+    sql+= '",dnk="'+obj.dnk
+    sql+= '",dnstr="'+obj.dnstr
+    sql+= '",space="'+obj.space
+    sql+= '",bandwidth="'
+    sql+= obj.bandwidth
+    sql+= '",customservice="'+obj.customservice+'" '
+    sql+= 'where id='+obj.id+' '
     return sql
 }
 getFees = obj => {
@@ -166,9 +188,9 @@ updateFee = obj => {
     sql = 'update fbfees '
     sql+= 'set '
     sql+= 'client_id="'+obj.client_id+'",name="'+obj.name+'",nofb="'+obj.nofb+'",dpp="'+obj.dpp+'",ppn="'+obj.ppn+'"'
-    sql+= 'where client_id="'+ob.client_id+'" '
-    and+= 'and name="'+ob.name+'" '
-    and+= 'and nofb="'+ob.nofb+'"'
+    sql+= 'where client_id="'+obj.client_id+'" '
+    sql+= 'and name="'+obj.name+'" '
+    sql+= 'and nofb="'+obj.nofb+'"'
     return sql
 }
 removeFee = obj => {

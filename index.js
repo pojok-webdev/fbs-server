@@ -8,33 +8,6 @@ var express = require('express'),
     jwt = require('jsonwebtoken'),
     secretOrKey = 'padinet',
     config = require('./js/configs.js'),
-    users = [
-        {
-            id: 1,
-            name: 'jonathanmh',
-            password: '%2yx4',
-            defaultRoute:'/fbs'
-          },
-          {
-            id: 2,
-            name: 'test',
-            password: 'test',
-            defaultRoute:'/fbs'
-          },
-        
-        {
-            id:3,
-            name:'puji',
-            password:'najma',
-            defaultRoute:'/fbs'
-        },
-        {
-            id:4,
-            name:'nuria',
-            password:'puji',
-            defaultRoute:'/fbs'
-        }
-    ],
     query = require('./js/queries');
 
 app.engine('html',require('ejs').renderFile)
@@ -88,7 +61,7 @@ app.post('/changepassword',(req,res) => {
     console.log("Body",req.body)
     db.executeQuery(query.login({email:req.body.email,password:req.body.password}),result => {
         user = result[0]
-        console.log("USER",result)
+        console.log("USER",user)
         console.log("req body password",req.body.newpassword)
         user.password = req.body.newpassword
         identity = auth.changePassword(user)
@@ -175,6 +148,12 @@ app.get('/getfb/:nofb',(req,res)=>{
         res.send(result)
     })
 })
+app.get('/getfbcount/:client_id', (req,res) => {
+    db.executeQuery(query.getFbCount({client_id:req.params.client_id}),result => {
+        console.log('Fb Count',result)
+        res.send(result)
+    })
+})
 app.get('/generatefb/:client_id', (req,res) => {
     db.executeQuery(query.getFbCount({client_id:req.params.client_id}),countresult => {
         console.log("CountResult",countresult)
@@ -240,13 +219,14 @@ app.get('/getservices/:nofb',(req,res)=>{
         res.send(result)
     })
 })
-app.post('/getservice',(req,res)=>{
-    db.executeQuery(query.getService(req.body),result=>{
+app.get('/getservice/:id',(req,res)=>{
+    db.executeQuery(query.getService(req.params),result=>{
         console.log("getservice",result)
         res.send(result)
     })
 })
 app.post('/saveservice',(req,res) => {
+    console.log("Save Service Params",req.body)
     db.executeQuery(query.saveService(req.body),result=>{
         console.log("saveservice",result)
         res.send(result)
@@ -255,7 +235,7 @@ app.post('/saveservice',(req,res) => {
 app.post('/updateservice',(req,res) => {
     console.log("Body Parser",req.body)
     console.log("Query",query.updateService(req.body))
-    db.executeQuery(query.updatePic(req.body),result=>{
+    db.executeQuery(query.updateService(req.body),result=>{
         console.log("updateservice",result)
         res.send(result)
     })

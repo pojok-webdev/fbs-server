@@ -13,6 +13,7 @@ login = (obj,password) => {
 }
 changePassword = (obj) => {
     mypassword = obj.password
+    console.log('mypassword',mypassword)
     salt = _createSalt()
     saltedpassword = sha1(salt+(mypassword).trim())
     return {salt:salt,password:saltedpassword}
