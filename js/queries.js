@@ -236,8 +236,16 @@ removeFbService = obj => {
     console.log(sql)
     return sql
 }
+removeFB = obj => {
+    console.log('OBH',obj)
+    sql = 'delete from fbs '
+    sql+= 'where nofb="'+obj.nofb+'" '
+    console.log(sql)
+    return sql
+}
 module.exports = {
-    removeFbService:removeFbService,
+    removeFB : removeFB,
+    removeFbService : removeFbService,
     removePic : removePic,
     getFbs : getFbs,
     getFb : getFb,
