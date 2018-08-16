@@ -272,4 +272,16 @@ app.post('/removefee', (req,res) => {
         res.send(result)
     })
 })
+app.post('/removepic', (req,res) => {
+    db.executeQuery(query.removePic(req.body), result => {
+        console.log("Remove Pic result",result)
+        res.send(result)
+    })
+})
+app.post('/removefbservice', (req,res) => {
+    db.executeQuery(query.removeFbService(req.body), result => {
+        console.log("Remove FB Service result",result)
+        res.send(result)
+    })
+})
 app.listen(process.env.PORT || 2000)

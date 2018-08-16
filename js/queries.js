@@ -222,7 +222,23 @@ createUser = obj => {
     sql+= '("'+obj.username+'","'+obj.email+'","'+obj.password+'","'+obj.salt+'","127.0.0.1",0)'
     return sql
 }
+removePic = obj => {
+    sql = 'delete from fbpics '
+    sql+= 'where role="'+obj.role+'" '
+    sql+= 'and nofb="'+obj.nofb+'" '
+    sql+= 'and client_id="'+obj.client_id+'" '
+    console.log('removepic sql',sql)
+    return sql
+}
+removeFbService = obj => {
+    sql = 'delete from fbservices '
+    sql+= 'where id='+ obj.id +' '
+    console.log(sql)
+    return sql
+}
 module.exports = {
+    removeFbService:removeFbService,
+    removePic : removePic,
     getFbs : getFbs,
     getFb : getFb,
     saveFb : saveFb,
