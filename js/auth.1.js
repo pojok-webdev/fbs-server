@@ -1,6 +1,6 @@
 var sha1 = require('sha1')
 login = (obj,password) => {
-    mypassword = (obj.password).trim()   
+    mypassword = (obj.password)
     salt = obj.salt
     saltedpassword = sha1(salt+password.trim())
     if(mypassword===saltedpassword){
