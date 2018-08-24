@@ -200,13 +200,13 @@ removeFee = obj => {
     return sql
 }
 login = obj => {
-    sql = 'select id,salt,password from users '
+    sql = 'select id,salt1,password1 from users '
     sql+= 'where email="'+obj.email+'" '
     return sql
 }
 updatePassword = (obj) => {
-    sql = 'update users set password="'+obj.password+'", '
-    sql+= 'salt="'+obj.salt+'" '
+    sql = 'update users set password1="'+obj.password+'", '
+    sql+= 'salt1="'+obj.salt+'" '
     sql+= 'where email = "' + obj.email + '" '
     return sql
 }
@@ -217,7 +217,7 @@ activateUser = (obj,active) => {
 }
 createUser = obj => {
     sql = 'insert into users '
-    sql+= '(username,email,password,salt,ip_address,created_on) '
+    sql+= '(username,email,password1,salt1,ip_address,created_on) '
     sql+= 'values '
     sql+= '("'+obj.username+'","'+obj.email+'","'+obj.password+'","'+obj.salt+'","127.0.0.1",0)'
     return sql
