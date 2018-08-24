@@ -4,6 +4,8 @@ login = (obj,password) => {
     mypassword = (obj.password1).trim()
     salt = obj.salt
     saltedpassword = sha1(salt+password.trim())
+    console.log("Salted password",saltedpassword)
+    console.log("dbpassword",mypassword)
     if(mypassword===saltedpassword){
         console.log("Login benar")
         return true
