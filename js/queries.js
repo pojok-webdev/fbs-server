@@ -202,6 +202,7 @@ removeFee = obj => {
 login = obj => {
     sql = 'select id,salt1,password1 from users '
     sql+= 'where email="'+obj.email+'" '
+    console.log("login query",sql);
     return sql
 }
 updatePassword = (obj) => {
