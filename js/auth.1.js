@@ -2,7 +2,7 @@ var sha1 = require('sha1')
 login = (obj,password) => {
     console.log("Login OBJ",obj)
     mypassword = (obj.password1).trim()
-    salt = obj.salt
+    salt = obj.salt1
     saltedpassword = sha1(salt+password.trim())
     console.log("Salted password",saltedpassword)
     console.log("dbpassword",mypassword)
