@@ -24,7 +24,7 @@ changePassword = (obj) => {
     }    
     console.log('mypassword',mypassword)
     salt = _createSalt()
-    saltedpassword = sha1(salt+(mypassword).trim())
+    saltedpassword = sha1(salt+mypassword.trim())
     return {salt:salt,password:saltedpassword}
 }
 createSalt = (length,chars) => {
