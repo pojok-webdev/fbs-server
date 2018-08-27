@@ -16,7 +16,11 @@ login = (obj,password) => {
 }
 changePassword = (obj) => {
     console.log("obj passwd tochange",obj)
-    mypassword = obj.password1
+    if(obj.password1==null){
+        mypassword = ""
+    }else{
+        mypassword = obj.password1
+    }    
     console.log('mypassword',mypassword)
     salt = _createSalt()
     saltedpassword = sha1(salt+(mypassword).trim())
