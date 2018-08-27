@@ -3,6 +3,7 @@ login = (obj,password) => {
     console.log("Login OBJ",obj)
     mypassword = (obj.password1).trim()
     salt = obj.salt1
+    console.log('Users Password',password)
     saltedpassword = sha1(salt+password.trim())
     console.log("Salted password",saltedpassword)
     console.log("dbpassword",mypassword)
