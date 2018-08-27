@@ -15,6 +15,7 @@ login = (obj,password) => {
     }
 }
 changePassword = (obj) => {
+    console.log("obj passwd tochange",obj)
     mypassword = obj.password1
     console.log('mypassword',mypassword)
     salt = _createSalt()
