@@ -101,8 +101,10 @@ app.get('/getlogin/:token',(req,res) => {
     console.log("decoded",decoded)
     res.send(decoded)
 })
-app.get('/getclients/:offset/:segment',(req,res) => {
-    db.executeQuery(query.getClients({offset:req.params.offset,segment:req.params.segment}), result => {
+app.get('/getclients/:orderby/:ordertype/:offset/:segment',(req,res) => {
+    db.executeQuery(query.getClients({
+        orderby:req.params.orderby,ordertype:req.params.ordertype,offset:req.params.offset,segment:req.params.segment
+    }), result => {
         res.send(result)
     })
 })

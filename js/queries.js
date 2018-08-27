@@ -1,9 +1,11 @@
 getClients = (obj) => {
-    sql = 'select a.id,a.name,a.alias, a.address, count(b.nofb)fbcount from clients a '
+    sql = 'select id,name,alias,address,fbcount from '
+    sql+= '(select a.id,a.name,a.alias, a.address, count(b.nofb)fbcount from clients a '
     sql+= 'left outer join fbs b on b.client_id=a.id '
     sql+= 'where active="1" '
     sql+= 'group by a.id,a.name,a.alias,a.address '
-    sql+= 'order by a.name asc '
+    sql_= 'order by a.name asc '
+    sql+= ') A order by '+obj.orderby+' '+obj.ordertype+' '
     sql+= 'limit '+obj.segment+','+obj.offset+' '
     console.log(sql)
     return sql
