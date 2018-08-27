@@ -17,10 +17,10 @@ login = (obj,password) => {
 }
 changePassword = (obj) => {
     console.log("obj passwd tochange",obj)
-    if(obj.password1==null){
+    if(obj.password==null){
         mypassword = ""
     }else{
-        mypassword = obj.password1
+        mypassword = obj.password
     }    
     console.log('mypassword',mypassword)
     salt = _createSalt()
