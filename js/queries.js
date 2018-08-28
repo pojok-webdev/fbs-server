@@ -61,12 +61,13 @@ getFbs = obj => {
     sql = 'select * from fbs '
     sql+= 'where client_id='+obj.client_id+' '
     sql+= 'limit '+obj.pageIndex+', '+obj.pageSize+ ' '
-
+    console.log("getFbs query",sql)
     return sql
 }
 getFb = obj => {
     sql = 'select * from fbs '
     sql+= 'where nofb = "' + obj.nofb + '" '
+    console.log("getFb query",sql)
     return sql
 }
 getFbCount = (obj) => {
@@ -93,8 +94,15 @@ saveFb = obj => {
 updateFb = obj => {
     sql = 'update fbs '
     sql+= 'set '
-    sql+= 'nofb="'+obj.nofb+'",client_id="'+obj.client_id+'",name="'+obj.name+'",businesstype="'+obj.businesstype+'",siup="'+obj.siup+'",npwp="'+obj.npwp+'",sppkp="'+obj.sppkp+'",address="'+obj.address+'",city="'+obj.city+'",telp="'+obj.telp+'",fax="'+obj.fax+'",activationdate="'+obj.activationdate+'",period1="'+obj.period1+'",period2="'+obj.period2+'",services="'+obj.services+'"'
+    sql+= 'nofb="'+obj.nofb+'",client_id="'+obj.client_id+'",'
+    sql+= 'name="'+obj.name+'",businesstype="'+obj.businesstype+'",'
+    sql+= 'siup="'+obj.siup+'",npwp="'+obj.npwp+'",'
+    sql+= 'sppkp="'+obj.sppkp+'",address="'+obj.address+'",'
+    sql+= 'city="'+obj.city+'",telp="'+obj.telp+'",fax="'+obj.fax+'",'
+    sql+= 'activationdate="'+obj.activationdate+'",period1="'+obj.period1+'",'
+    sql+= 'period2="'+obj.period2+'",status="'+obj.status+'",services="'+obj.services+'"'
     sql+= 'where nofb="'+obj.nofb+'"'
+    console.log('updateFb query',sql)
     return sql
 }
 getPics = obj => {
